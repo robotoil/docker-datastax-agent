@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Environment variables:
+# - DATASTAX_AGENT_OPSCENTER_HOST: Required. Hostname or ip address of OpsCenter. 
+# - DATASTAX_AGENT_USE_SSL: Optional, defaults to 0. If SSL communication is enabled in opscenterd.conf, use SSL in address.yaml.
+# 
+
+USE_SSL=${DATASTAX_AGENT_USE_SSL:-0}
+
+if [[ -z $DATASTAX_AGENT_OPSCENTER_HOST ]]; then
+	echo "No DATASTAX_AGENT_OPSCENTER_HOST provided. Aborting because OpsCenter must be reachable."
+	exit 1
+else
+	echo "OpsCenter host is: $DATASTAX_AGENT_OPSCENTER_HOST"
+	echo "Initializing /opt/agent/conf/address.yaml"
+	echo "stomp_interface: $DATASTAX_AGENT_OPSCENTER_HOST" >> /opt/agent/conf/address.yaml
+	echo "stomp_interface: $USE_SSL" >> /opt/agent/conf/address.yaml
+	echo "Starting DataStax Agent"
+	cd /opt/agent
+	bin/datastax-agent -f
+fi
+
