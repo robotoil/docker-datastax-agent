@@ -5,7 +5,9 @@ MAINTAINER alan.gibson@kapsch.net
 ENV VERSION 5.2.4
 
 # Update base OS
-RUN apt-get update; apt-get upgrade -y -qq;
+RUN apt-get update; \
+    apt-get upgrade -y -qq; \
+    apt-get install -y -qq sysstat;
 
 # Install Oracle Java 7
 RUN \
